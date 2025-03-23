@@ -60,7 +60,7 @@ private:
     _
 
     INITIALIZE
-        state.numberOfEchoCalls = 0;
-        state.numberOfBurnCalls = 0;
+        state.numberOfEchoCalls = 10;
+        state.numberOfBurnCalls = 10;
     _
 };
