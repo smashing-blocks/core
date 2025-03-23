@@ -45,6 +45,7 @@ protected:
     uint64 totalRewards;        // Accumulates all rewards received
     uint64 numberOfEntries;     // Counter for number of entries in the array
     Array<WalletDataEntry, 1024> walletDataEntries;  // Array to store wallet data
+    uint64 test;
 
 
     PUBLIC_PROCEDURE(SaveWalletData)
@@ -80,7 +81,7 @@ protected:
 
     PUBLIC_FUNCTION_WITH_LOCALS(TestNumber)
         // Devuelve un número constante para testing
-        output.number = 42ULL;
+        output.number = state.test;
     _
 
     // Register contract functions and procedures
@@ -94,5 +95,7 @@ protected:
     INITIALIZE
         state.totalRewards = 0;
         state.numberOfEntries = 0;
+        state.test = 100;
     _
+
 };
