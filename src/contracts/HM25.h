@@ -7,60 +7,93 @@ struct HM252
 struct HM25 : public ContractBase
 {
 public:
-    struct Echo_input{};
-    struct Echo_output{};
-
-    struct Burn_input{};
-    struct Burn_output{};
-
-    struct GetStats_input {};
-    struct GetStats_output
-    {
-        uint64 numberOfEchoCalls;
-        uint64 numberOfBurnCalls;
+    // Structure to store wallet data entries with an ID and a value
+    struct WalletDataEntry {
+        id walletId;
+        uint64 value;
     };
 
-private:
-    uint64 numberOfEchoCalls;
-    uint64 numberOfBurnCalls;
+    // Input/Output structures for SaveWalletData procedure
+    struct SaveWalletData_input {
+        id walletId;
+        uint64 value;
+    };
+    struct SaveWalletData_output {};
 
-    /**
-    Send back the invocation amount
-    */
-    PUBLIC_PROCEDURE(Echo)
-        state.numberOfEchoCalls++;
+    // Input/Output/Locals structures for GetStoredData function
+    struct GetStoredData_input {
+        uint64 index;
+    };
+    struct GetStoredData_output {
+        id walletId;
+        uint64 value;
+    };
+    struct GetStoredData_locals {
+        WalletDataEntry entry;
+    };
+
+    struct TestNumber_input {
+    };
+    struct TestNumber_output {
+        uint64 number;
+    };
+
+protected:
+    // Contract state variables
+    uint64 totalRewards;        // Accumulates all rewards received
+    uint64 numberOfEntries;     // Counter for number of entries in the array
+    Array<WalletDataEntry, 1024> walletDataEntries;  // Array to store wallet data
+    uint64 test;
+
+
+    PUBLIC_PROCEDURE(SaveWalletData)
+        // Create new entry with input data
+        WalletDataEntry newEntry;
+        newEntry.walletId = input.walletId;
+        newEntry.value = input.value;
+
+        // Check if there's space and save to array
+        if (state.numberOfEntries < 1024)
+        {
+            state.walletDataEntries.set(state.numberOfEntries, newEntry);
+            state.numberOfEntries++;
+        }
+
+        // Store any invocation rewards in the contract
         if (qpi.invocationReward() > 0)
         {
-            qpi.transfer(qpi.invocator(), qpi.invocationReward());
+            state.totalRewards += qpi.invocationReward();
         }
     _
 
-    /**
-    * Burn all invocation amount
-    */
-    PUBLIC_PROCEDURE(Burn)
-        state.numberOfBurnCalls++;
-        if (qpi.invocationReward() > 0)
+
+    PUBLIC_FUNCTION_WITH_LOCALS(GetStoredData)
+   
+        if (input.index < state.numberOfEntries)
         {
-            qpi.burn(qpi.invocationReward());
+            locals.entry = state.walletDataEntries.get(input.index);
+            output.walletId = locals.entry.walletId;
+            output.value = locals.entry.value;
         }
     _
 
-    PUBLIC_FUNCTION(GetStats)
-        output.numberOfBurnCalls = state.numberOfBurnCalls;
-        output.numberOfEchoCalls = state.numberOfEchoCalls;
+    PUBLIC_FUNCTION(TestNumber)
+        // Devuelve un número constante para testing
+        output.number = state.test;
     _
 
+    // Register contract functions and procedures
     REGISTER_USER_FUNCTIONS_AND_PROCEDURES
-
-        REGISTER_USER_PROCEDURE(Echo, 1);
-        REGISTER_USER_PROCEDURE(Burn, 2);
-
-        REGISTER_USER_FUNCTION(GetStats, 1);
+        REGISTER_USER_PROCEDURE(SaveWalletData, 1);
+        REGISTER_USER_FUNCTION(GetStoredData, 1);
+        REGISTER_USER_FUNCTION(TestNumber, 2);
     _
 
+    // Initialize contract state
     INITIALIZE
-        state.numberOfEchoCalls = 10;
-        state.numberOfBurnCalls = 10;
+        state.totalRewards = 0;
+        state.numberOfEntries = 0;
+        state.test = 100;
     _
+
 };
