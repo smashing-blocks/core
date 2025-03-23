@@ -36,7 +36,7 @@ protected:
     // Contract state variables
     uint64 totalRewards;        // Accumulates all rewards received
     uint64 numberOfEntries;     // Counter for number of entries in the array
-    Array<WalletDataEntry, 1000> walletDataEntries;  // Array to store wallet data
+    Array<WalletDataEntry, 1024> walletDataEntries;  // Array to store wallet data
 
 
     PUBLIC_PROCEDURE(SaveWalletData)
@@ -46,7 +46,7 @@ protected:
         newEntry.value = input.value;
 
         // Check if there's space and save to array
-        if (state.numberOfEntries < 1000)
+        if (state.numberOfEntries < 1024)
         {
             state.walletDataEntries.set(state.numberOfEntries, newEntry);
             state.numberOfEntries++;
