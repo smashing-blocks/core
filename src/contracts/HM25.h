@@ -85,8 +85,8 @@ protected:
     // Register contract functions and procedures
     REGISTER_USER_FUNCTIONS_AND_PROCEDURES
         REGISTER_USER_PROCEDURE(SaveWalletData, 1);
-        REGISTER_USER_FUNCTION(GetStoredData, 2);
-        REGISTER_USER_FUNCTION(TestNumber, 3);
+        REGISTER_USER_FUNCTION(GetStoredData, 1);
+        REGISTER_USER_FUNCTION(TestNumber, 2);
     _
 
     // Initialize contract state
