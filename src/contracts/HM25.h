@@ -72,7 +72,7 @@ protected:
 
     // Register contract functions and procedures
     REGISTER_USER_FUNCTIONS_AND_PROCEDURES
-        REGISTER_USER_FUNCTION(SaveWalletData, 1);
+        REGISTER_USER_PROCEDURE(SaveWalletData, 1);
         REGISTER_USER_FUNCTION(GetStoredData, 2);
     _
 
