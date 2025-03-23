@@ -37,8 +37,6 @@ public:
     struct TestNumber_output {
         uint64 number;
     };
-    struct TestNumber_locals {
-    };
 
 protected:
     // Contract state variables
@@ -79,7 +77,7 @@ protected:
         }
     _
 
-    PUBLIC_FUNCTION_WITH_LOCALS(TestNumber)
+    PUBLIC_FUNCTION(TestNumber)
         // Devuelve un número constante para testing
         output.number = state.test;
     _
