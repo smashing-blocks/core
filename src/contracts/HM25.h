@@ -28,7 +28,7 @@ private:
     Send back the invocation amount
     */
     PUBLIC_PROCEDURE(Echo)
-        state.numberOfEchoCalls++;
+        state.numberOfEchoCalls+;
         if (qpi.invocationReward() > 0)
         {
             qpi.transfer(qpi.invocator(), qpi.invocationReward());
