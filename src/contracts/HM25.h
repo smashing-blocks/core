@@ -32,6 +32,14 @@ public:
         WalletDataEntry entry;
     };
 
+    struct TestNumber_input {
+    };
+    struct TestNumber_output {
+        uint64 number;
+    };
+    struct TestNumber_locals {
+    };
+
 protected:
     // Contract state variables
     uint64 totalRewards;        // Accumulates all rewards received
@@ -70,10 +78,16 @@ protected:
         }
     _
 
+    PUBLIC_FUNCTION_WITH_LOCALS(TestNumber)
+        // Devuelve un número constante para testing
+        output.number = 42ULL;
+    _
+
     // Register contract functions and procedures
     REGISTER_USER_FUNCTIONS_AND_PROCEDURES
         REGISTER_USER_PROCEDURE(SaveWalletData, 1);
         REGISTER_USER_FUNCTION(GetStoredData, 2);
+        REGISTER_USER_FUNCTION(TestNumber, 3);
     _
 
     // Initialize contract state
